@@ -10,7 +10,7 @@ type FormData = {
   author: string;
   published: string;
 };
-const AddNewBook = () => {
+const EditBook = () => {
   const {
     register,
     handleSubmit,
@@ -34,7 +34,7 @@ const AddNewBook = () => {
           <div className="w-full  rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
-                Add new book
+                Update book
               </h1>
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -155,4 +155,4 @@ const AddNewBook = () => {
   );
 };
 
-export default AddNewBook;
+export default EditBook;

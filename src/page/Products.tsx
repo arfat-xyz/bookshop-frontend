@@ -1,16 +1,14 @@
 import React from "react";
-import Hero from "../components/Home/Hero";
 import ProductSection from "../components/ProductSection";
 
-const Home = () => {
+const Products = () => {
   return (
     <>
-      <Hero />
       <div className="max-w-screen-lg mx-auto">
-        <ProductSection heading="Top 10 products" />
+        <ProductSection heading={null} />
       </div>
     </>
   );
 };
 
-export default Home;
+export default Products;

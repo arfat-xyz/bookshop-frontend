@@ -1,11 +1,29 @@
+import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
-
-const SingleProduct = (product: { product: number }) => {
-  console.log(product);
+import { AiFillHeart } from "react-icons/ai";
+import { IProduct } from "../Types/globalTypes";
+import { useAppDispatch } from "../redux/hook";
+import { addToCart } from "../redux/cart/cartSlice";
+const SingleProduct = ({ product }: { product: IProduct }) => {
+  const { ref, inView } = useInView();
+  const dispatch = useAppDispatch();
+  const handleClick = () => {
+    console.log(product);
+    dispatch(addToCart(product));
+  };
   return (
     <>
-      <div className="w-60 border-2 rounded-2xl">
-        <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+      <div
+        ref={ref}
+        className={`w-[240px] ${
+          inView && "animate-fadeIn"
+        } border-2 rounded-2xl`}
+      >
+        <div
+          className={`flex w-full ${
+            inView && `animate-fadeInUp animate-slow`
+          }  first-letter:max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md`}
+        >
           <Link
             className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
             to={"/"}
@@ -17,37 +35,26 @@ const SingleProduct = (product: { product: number }) => {
             />
           </Link>
           <div className="mt-4 px-5 pb-5">
-            <Link to={"/"}>
-              <h5 className="text-xl tracking-tight text-slate-900">
-                Nike Air MX Super 2500 - Red
+            <Link to={"/book/arfat"}>
+              <h5 className="text-xl font-bold tracking-tight text-slate-900">
+                {product.title}
               </h5>
             </Link>
-            <div className="mt-2 mb-5 flex items-center justify-between">
-              <p>
-                <span className="text-3xl font-bold text-slate-900">$449</span>
-              </p>
-              <div className="flex items-center"></div>
+            <div className="my-2 flex items-center justify-between">
+              <p>Author : {product.author}</p>
             </div>
-            <Link
-              to={"/"}
-              className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            <div className="my-2 flex items-center justify-between">
+              <p>Genre : {product.genre}</p>
+            </div>
+            <div className="my-2 flex items-center justify-between">
+              <p>Publish : {product.publication_date}</p>
+            </div>
+            <button
+              onClick={handleClick}
+              className="w-full flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              Add to cart
-            </Link>
+              <AiFillHeart /> <span className="pl-3">Add to wishlist</span>
+            </button>
           </div>
         </div>
       </div>
