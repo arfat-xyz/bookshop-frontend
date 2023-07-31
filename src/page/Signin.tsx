@@ -2,7 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import logo from "/amazing.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../redux/hook";
+import { loginUser } from "../redux/user/userSlice";
 type FormData = {
   email: string;
   password: string;
@@ -16,8 +18,12 @@ const Signin = () => {
     formState: { errors },
   } = useForm<FormData>();
   const { email, password } = watch();
+  const dispatch = useAppDispatch();
+  const naiv = useNavigate();
   const onSubmit = (data: FormData) => {
     console.log(data);
+    dispatch(loginUser({ email: data.email, password: data.password }));
+    naiv("/");
   };
   return (
     <>
@@ -30,7 +36,7 @@ const Signin = () => {
             <img className="w-auto h-36 mr-2" src={logo} alt="logo" />
           </Link>
           <div className="w-full  rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8"> 
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
                 Sign in to your account
               </h1>

@@ -7,6 +7,7 @@ import AddNewBook from "../page/AddNewBook";
 import BookDetails from "../page/BookDetails";
 import EditBook from "../page/EditBook";
 import Products from "../page/Products";
+import Logout from "../page/Logout";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +20,10 @@ const routers = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/logout",
+        element: <Logout />,
       },
       {
         path: "/products",

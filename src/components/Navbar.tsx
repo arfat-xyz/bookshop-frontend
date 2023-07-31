@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 import logo from "/amazing.png";
 import { useState } from "react";
 import Cart from "./Cart";
+import ReadingList from "./ReadingList";
+import { useAppSelector } from "../redux/hook";
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
 
+  const { email } = useAppSelector((state) => state.user.user);
   return (
     <>
       <nav className=" border-gray-200 bg-gray-900">
@@ -55,39 +58,49 @@ const Navbar = () => {
                   Products
                 </Link>
               </li>
-              <li>
-                <Link
-                  to={"/signin"}
-                  className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
-                >
-                  Sign In
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/signup"}
-                  className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
-                >
-                  Sign Up
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/add-new-book"}
-                  className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
-                >
-                  Add New
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/logout"}
-                  className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
-                >
-                  Logout
-                </Link>
-              </li>
+
+              {email ? (
+                <>
+                  <li>
+                    <Link
+                      to={"/add-new-book"}
+                      className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
+                    >
+                      Add New
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/logout"}
+                      className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to={"/signin"}
+                      className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
+                    >
+                      Sign In
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/signup"}
+                      className="block py-2 pl-3 pr-4 rounded md:border-0  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent"
+                    >
+                      Sign Up
+                    </Link>
+                  </li>
+                </>
+              )}
+
               <Cart />
+              <ReadingList />
             </ul>
           </div>
           <div
@@ -145,6 +158,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <Cart />
+              <ReadingList />
             </ul>
           </div>
         </div>

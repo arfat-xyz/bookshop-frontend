@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { AiFillHeart, AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { BsCardChecklist } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { IProduct } from "../Types/globalTypes";
-import { deleteFromCart } from "../redux/cart/cartSlice";
-const Cart = () => {
+import { deleteFromList, markAsFinished } from "../redux/readList/listSlice";
+const ReadingList = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { products } = useAppSelector((state) => state.cart);
+  const { products } = useAppSelector((state) => state.list);
+
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const handleSideBar = () => {
     setShowSidebar(!showSidebar);
   };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
   }, []);
@@ -19,8 +22,14 @@ const Cart = () => {
       setShowSidebar(false);
     }
   };
+  if (!products) {
+    return "No products";
+  }
   const handleDelete = (product: IProduct) => {
-    dispatch(deleteFromCart(product));
+    dispatch(deleteFromList(product));
+  };
+  const handleFinished = (product: IProduct) => {
+    dispatch(markAsFinished(product));
   };
   return (
     <>
@@ -29,14 +38,14 @@ const Cart = () => {
           onClick={() => handleSideBar()}
           className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white"
         >
-          <AiFillHeart
+          <BsCardChecklist
             size="30"
-            className={`${products.length > 0 ? "text-red-500" : ""}`}
+            className={`${products?.length > 0 ? "text-red-500" : ""}`}
           />{" "}
           <span className="sr-only">Notifications</span>
-          {products.length > 0 && (
+          {products?.length > 0 && (
             <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
-              {products.length > 0 ? products.length : ""}
+              {products?.length > 0 ? products?.length : ""}
             </div>
           )}
         </button>
@@ -56,16 +65,18 @@ const Cart = () => {
           <AiOutlineClose size="30" />
         </div>
         <div>
-          <h1 className="text-2xl text-center">Wishlist</h1>
+          <h1 className="text-2xl text-center">Reading list</h1>
         </div>
         <div className="flex flex-col w-[95%] mx-auto">
           {products.map((product, i) => (
             <div
               key={i}
-              className="grid grid-cols-12 items-center shadow-lg mt-3 rounded-lg p-3"
+              className={`grid grid-cols-12 items-center ${
+                product.finished && "bg-green-500"
+              } shadow-lg mt-3 rounded-lg p-3`}
             >
               <div className="col-span-2">
-                <img src={product.image} />
+                <img src={product.image} className="rounded-lg" />
               </div>
               <div className="col-span-8 pl-8">
                 <h5 className="text-2xl">{product.title}</h5>
@@ -79,12 +90,22 @@ const Cart = () => {
                   <strong>Publishe:</strong> {product.publication_date}
                 </p>
               </div>
-              <button
-                onClick={() => handleDelete(product)}
-                className="col-span-2 w-full h-full flex justify-center rounded-lg items-center bg-red-400"
-              >
-                <AiOutlineDelete size="30" className="text-red-600" />
-              </button>
+              <div className="flex flex-col col-span-2">
+                {!product.finished && (
+                  <button
+                    onClick={() => handleFinished(product)}
+                    className={`flex justify-center rounded-lg items-center shadow-lg py-2`}
+                  >
+                    Complete
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(product)}
+                  className={`flex justify-center rounded-lg items-center shadow-lg py-2 bg-red-600 text-gray-200 mt-2 `}
+                >
+                  <AiOutlineDelete />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -93,4 +114,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default ReadingList;

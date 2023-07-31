@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@types/redux-logger": "^3.0.9",
     "animated-tailwindcss": "^4.0.0",
+    "firebase": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.2",

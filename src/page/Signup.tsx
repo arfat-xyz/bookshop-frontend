@@ -1,7 +1,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { createUser } from "../redux/user/userSlice";
 type FormData = {
   email: string;
   password: string;
@@ -14,10 +16,21 @@ const Signup = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>();
+  const navigate = useNavigate();
   const { email, password, confirmPassword } = watch();
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const onSubmit = async (data: FormData) => {
+    await dispatch(
+      createUser({
+        email: data.email,
+        password: data.password,
+      })
+    );
   };
+  if (user.user?.email) {
+    navigate("/");
+  }
   return (
     <>
       <section className="  bg-gray-900">
@@ -117,6 +130,9 @@ const Signup = () => {
                 >
                   Sign up
                 </button>
+                {user.error && (
+                  <span className="text-red-600">{user.error}</span>
+                )}
                 <p className="text-sm font-light   text-gray-400">
                   Already have an account?{" "}
                   <Link
