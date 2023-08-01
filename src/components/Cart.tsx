@@ -3,10 +3,13 @@ import { AiFillHeart, AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { IProduct } from "../Types/globalTypes";
 import { deleteFromCart } from "../redux/cart/cartSlice";
+import { useDeleteFromDBCartMutation } from "../redux/cart/apiCart";
 const Cart = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { products } = useAppSelector((state) => state.cart);
+  const { email } = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
+  const [deleteCartFromDB] = useDeleteFromDBCartMutation();
   const ref = useRef<HTMLDivElement>(null);
   const handleSideBar = () => {
     setShowSidebar(!showSidebar);
@@ -20,6 +23,7 @@ const Cart = () => {
     }
   };
   const handleDelete = (product: IProduct) => {
+    deleteCartFromDB({ email, id: product._id });
     dispatch(deleteFromCart(product));
   };
   return (

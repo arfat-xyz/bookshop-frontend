@@ -5,6 +5,7 @@ import logo from "/amazing.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../redux/hook";
 import { loginUser } from "../redux/user/userSlice";
+import { toast } from "react-toastify";
 type FormData = {
   email: string;
   password: string;
@@ -20,10 +21,15 @@ const Signin = () => {
   const { email, password } = watch();
   const dispatch = useAppDispatch();
   const naiv = useNavigate();
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    dispatch(loginUser({ email: data.email, password: data.password }));
-    naiv("/");
+  const onSubmit = async (data: FormData) => {
+    const x = await dispatch(
+      loginUser({ email: data.email, password: data.password })
+    );
+    if (x.payload) {
+      naiv("/");
+    } else {
+      toast.error(x.type);
+    }
   };
   return (
     <>

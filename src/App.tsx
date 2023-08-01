@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import { useAppDispatch, useAppSelector } from "./redux/hook";
 import { getUser } from "./redux/user/userSlice";
@@ -8,6 +9,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import auth from "./firebase";
 import { useGetfromDbListQuery } from "./redux/readList/apiList";
 import { getList } from "./redux/readList/listSlice";
+import { useGetfromDbCartQuery } from "./redux/cart/apiCart";
+import { getCart } from "./redux/cart/cartSlice";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -16,15 +20,23 @@ function App() {
     refetchOnMountOrArgChange: true,
     pollingInterval: 30000,
   });
-  console.log(data);
+  const { data: cart, isLoading: isCartLoading } = useGetfromDbCartQuery(
+    email,
+    {
+      refetchOnMountOrArgChange: true,
+      pollingInterval: 30000,
+    }
+  );
+  cart && dispatch(getCart(cart?.data));
   data && dispatch(getList(data?.data));
-  if (isLoading) "Loading...";
+  if (isLoading && isCartLoading) "Loading...";
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => dispatch(getUser(user?.email)));
   }, [dispatch]);
   return (
     <>
+      <ToastContainer />
       <div className=" bg-slate-800">
         {!email && (
           <div className="bg-gray-900 text-red-200 text-xl text-center">

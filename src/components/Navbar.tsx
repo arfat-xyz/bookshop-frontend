@@ -4,6 +4,7 @@ import { useState } from "react";
 import Cart from "./Cart";
 import ReadingList from "./ReadingList";
 import { useAppSelector } from "../redux/hook";
+import SearchBox from "./SearchBox";
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -77,6 +78,8 @@ const Navbar = () => {
                       Logout
                     </Link>
                   </li>
+                  <Cart />
+                  <ReadingList />
                 </>
               ) : (
                 <>
@@ -98,9 +101,7 @@ const Navbar = () => {
                   </li>
                 </>
               )}
-
-              <Cart />
-              <ReadingList />
+              <SearchBox />
             </ul>
           </div>
           <div

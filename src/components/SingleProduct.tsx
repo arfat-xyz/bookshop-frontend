@@ -6,16 +6,19 @@ import { addToCart } from "../redux/cart/cartSlice";
 import { BsCardChecklist } from "react-icons/bs";
 // import { addToList } from "../redux/readList/listSlice";
 import { useAddToDbListMutation } from "../redux/readList/apiList";
+import { useAddToDbCartMutation } from "../redux/cart/apiCart";
 const SingleProduct = ({ product }: { product: IProduct }) => {
   const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user.user);
   const [value] = useAddToDbListMutation();
+  const [addtoreadinlist] = useAddToDbCartMutation();
   const handleAddToWishlist = () => {
+    addtoreadinlist({ email, id: product._id });
     dispatch(addToCart(product));
   };
   const handleAddToReadlist = () => {
     // dispatch(addToList(product));
-    value({ email, id: product._id },);
+    value({ email, id: product._id });
   };
   return (
     <>

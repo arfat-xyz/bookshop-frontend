@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import { BsCardChecklist } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { IProduct } from "../Types/globalTypes";
-import { deleteFromList, markAsFinished } from "../redux/readList/listSlice";
+import { deleteFromList } from "../redux/readList/listSlice";
+import { useDeleteFromDBListMutation } from "../redux/readList/apiList";
 const ReadingList = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const { products } = useAppSelector((state) => state.list);
-
+  const { email } = useAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const handleSideBar = () => {
     setShowSidebar(!showSidebar);
   };
-
+  const [deleteFromDB] = useDeleteFromDBListMutation();
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
   }, []);
@@ -23,14 +24,13 @@ const ReadingList = () => {
     }
   };
   if (!products) {
-    return "No products";
+    return "";
   }
   const handleDelete = (product: IProduct) => {
+    deleteFromDB({ email, id: product._id });
     dispatch(deleteFromList(product));
   };
-  const handleFinished = (product: IProduct) => {
-    dispatch(markAsFinished(product));
-  };
+
   return (
     <>
       <li>
@@ -93,18 +93,12 @@ const ReadingList = () => {
               <div className="flex flex-col col-span-2">
                 {!product.finished && (
                   <button
-                    onClick={() => handleFinished(product)}
+                    onClick={() => handleDelete(product)}
                     className={`flex justify-center rounded-lg items-center shadow-lg py-2`}
                   >
                     Complete
                   </button>
                 )}
-                <button
-                  onClick={() => handleDelete(product)}
-                  className={`flex justify-center rounded-lg items-center shadow-lg py-2 bg-red-600 text-gray-200 mt-2 `}
-                >
-                  <AiOutlineDelete />
-                </button>
               </div>
             </div>
           ))}

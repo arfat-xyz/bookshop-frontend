@@ -2,24 +2,36 @@
 
 import { useForm } from "react-hook-form";
 import logo from "/amazing.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../redux/hook";
+import { usePostProductsMutation } from "../redux/book/bookApi";
 type FormData = {
   image: string;
   title: string;
   genre: string;
   author: string;
-  published: string;
+  addBy: string;
+  publication_date: string;
 };
 const AddNewBook = () => {
+  const [postProducts] = usePostProductsMutation();
+  const navigate = useNavigate();
+  const { email } = useAppSelector((state) => state.user.user);
+  if (!email) {
+    navigate("/");
+  }
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<FormData>();
-  const { image, title, genre, author, published } = watch();
+
+  const { image, title, genre, author, publication_date } = watch();
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    data = { ...data, addBy: email! };
+    postProducts(data);
+    navigate("/");
   };
   return (
     <>
@@ -119,22 +131,22 @@ const AddNewBook = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor="published"
+                    htmlFor="publication_date"
                     className="block mb-2 text-sm font-medium   text-white"
                   >
                     Publication Date
                   </label>
                   <input
-                    {...register("published", { required: true })}
+                    {...register("publication_date", { required: true })}
                     type="date"
-                    name="published"
-                    id="published"
+                    name="publication_date"
+                    id="publication_date"
                     placeholder="Publication date"
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
-                  {errors.published && (
+                  {errors.publication_date && (
                     <span className="bg-red-700">
-                      {errors.published.message}
+                      {errors.publication_date.message}
                     </span>
                   )}
                 </div>
@@ -142,7 +154,9 @@ const AddNewBook = () => {
                 <button
                   type="submit"
                   className="w-full border-2 hover:border-stone-500 transition-all ease-in-out text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  bg-primary-600  hover:bg-primary-700  focus:ring-primary-800"
-                  disabled={!image || !title || !genre || !published || !author}
+                  disabled={
+                    !image || !title || !genre || !publication_date || !author
+                  }
                 >
                   Submit book
                 </button>

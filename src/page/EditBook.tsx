@@ -2,25 +2,49 @@
 
 import { useForm } from "react-hook-form";
 import logo from "/amazing.png";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useGetSingleProductQuery } from "../redux/api/apiSlice";
+import { useAppSelector } from "../redux/hook";
+import { useUpdatePorductsMutation } from "../redux/book/bookApi";
 type FormData = {
   image: string;
   title: string;
   genre: string;
   author: string;
-  published: string;
+  publication_date: string;
 };
 const EditBook = () => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
-  const { image, title, genre, author, published } = watch();
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { email } = useAppSelector((state) => state.user.user);
+  const { data, isLoading } = useGetSingleProductQuery(id);
+  isLoading && "loading";
+  useEffect(() => {
+    reset({
+      image: data?.data?.image,
+      author: data?.data?.author,
+      title: data?.data?.title,
+      genre: data?.data?.genre,
+      publication_date: data?.data?.publication_date,
+    });
+  }, [data, reset]);
+  const [updateProduct] = useUpdatePorductsMutation();
+  const { image, title, genre, author, publication_date } = watch();
+  const onSubmit = async (payload: FormData) => {
+    const updated = await updateProduct({ id, payload });
+    if ("data" in updated && updated.data?.data) {
+      navigate("/");
+    }
   };
+
   return (
     <>
       <section className="bg-gray-900  md:min-h-screen px-6 py-8">
@@ -119,22 +143,22 @@ const EditBook = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor="published"
+                    htmlFor="publication_date"
                     className="block mb-2 text-sm font-medium   text-white"
                   >
                     Publication Date
                   </label>
                   <input
-                    {...register("published", { required: true })}
+                    {...register("publication_date", { required: true })}
                     type="date"
-                    name="published"
-                    id="published"
+                    name="publication_date"
+                    id="publispublication_datehed"
                     placeholder="Publication date"
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
-                  {errors.published && (
+                  {errors.publication_date && (
                     <span className="bg-red-700">
-                      {errors.published.message}
+                      {errors.publication_date.message}
                     </span>
                   )}
                 </div>
@@ -142,7 +166,14 @@ const EditBook = () => {
                 <button
                   type="submit"
                   className="w-full border-2 hover:border-stone-500 transition-all ease-in-out text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  bg-primary-600  hover:bg-primary-700  focus:ring-primary-800"
-                  disabled={!image || !title || !genre || !published || !author}
+                  disabled={
+                    !image ||
+                    !title ||
+                    !genre ||
+                    !publication_date ||
+                    !author ||
+                    email !== data.data.addBy
+                  }
                 >
                   Submit book
                 </button>

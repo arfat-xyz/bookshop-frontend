@@ -1,34 +1,34 @@
 import { apiSlice } from "../api/apiSlice";
 
-const apiList = apiSlice.injectEndpoints({
+const apiCart = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    addToDbList: builder.mutation({
+    addToDbCart: builder.mutation({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
-        url: `reads`,
+        url: `wishlists`,
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["readlist"],
+      invalidatesTags: ["wishlish"],
     }),
-    deleteFromDBList: builder.mutation({
+    deleteFromDBCart: builder.mutation({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
-        url: `reads`,
+        url: `wishlists`,
         method: "DELETE",
         body: payload,
       }),
-      invalidatesTags: ["readlist"],
+      invalidatesTags: ["wishlish"],
     }),
-    getfromDbList: builder.query({
+    getfromDbCart: builder.query({
       // note: an optional `queryFn` may be used in place of `query`
-      query: (email) => `/reads/${email}`,
-      providesTags: ["readlist"],
+      query: (email) => `/wishlists/${email}`,
+      providesTags: ["wishlish"],
     }),
   }),
 });
 export const {
-  useAddToDbListMutation,
-  useGetfromDbListQuery,
-  useDeleteFromDBListMutation,
-} = apiList;
+  useAddToDbCartMutation,
+  useDeleteFromDBCartMutation,
+  useGetfromDbCartQuery,
+} = apiCart;

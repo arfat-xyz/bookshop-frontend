@@ -12,8 +12,7 @@ export const listSlice = createSlice({
   initialState,
   reducers: {
     addToList: (store, action: PayloadAction<IProduct>) => {
-      action.payload = { ...action.payload, finished: false }
-      console.log(action.payload);
+      action.payload = { ...action.payload, finished: false };
       const exist = store.products.find(
         (product) => product._id === action.payload._id
       );
@@ -22,7 +21,7 @@ export const listSlice = createSlice({
       }
     },
     getList: (store, action: PayloadAction<IProduct[]>) => {
-      store.products = action.payload
+      store.products = action.payload;
     },
     deleteFromList: (store, action: PayloadAction<IProduct>) => {
       store.products = store.products.filter(
@@ -30,7 +29,6 @@ export const listSlice = createSlice({
       );
     },
     markAsFinished: (store, action: PayloadAction<IProduct>) => {
-      console.log(action.payload, 'From redux');
       store.products = store.products.filter((product) => {
         if (product._id === action.payload._id) {
           product.finished = true;
@@ -42,5 +40,6 @@ export const listSlice = createSlice({
     },
   },
 });
-export const { addToList, deleteFromList, markAsFinished, getList } = listSlice.actions;
+export const { addToList, deleteFromList, markAsFinished, getList } =
+  listSlice.actions;
 export default listSlice.reducer;

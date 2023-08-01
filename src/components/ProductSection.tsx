@@ -1,3 +1,4 @@
+import { useLocation, useSearchParams } from "react-router-dom";
 import { IProduct } from "../Types/globalTypes";
 import { useGetAllProductsQuery } from "../redux/api/apiSlice";
 import SingleProduct from "./SingleProduct";
@@ -97,9 +98,22 @@ const ProductSection = ({ heading }: { heading: null | string }) => {
   //     publication_date: "2023-6-22",
   //   },
   // ];
-  const [products, setProducts] = useState([]);
 
-  const { data, isLoading } = useGetAllProductsQuery("");
+  const [products, setProducts] = useState([]);
+  let limit: number;
+  const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  let search = searchParams.get("search");
+  if (!search) {
+    search = "";
+  }
+  if (pathname === "/") {
+    limit = 10;
+  } else {
+    limit = 999;
+  }
+
+  const { data, isLoading } = useGetAllProductsQuery({ limit, search });
   useEffect(() => {
     if (data) setProducts(data.data);
   }, [data]);
