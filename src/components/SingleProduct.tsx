@@ -28,7 +28,7 @@ const SingleProduct = ({ product }: { product: IProduct }) => {
         >
           <Link
             className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-            to={"/"}
+            to={`/book/${product._id}`}
           >
             <img className="w-full" src={product.image} alt="product image" />
           </Link>
