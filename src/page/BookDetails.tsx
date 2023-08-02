@@ -8,6 +8,7 @@ import { addToCart } from "../redux/cart/cartSlice";
 import { BsCardChecklist } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { useDeletePorductsMutation } from "../redux/book/bookApi";
+import SingleProductReviews from "../components/SingleProductReviews";
 const BookDetails = () => {
   const [product, setProduct] = useState<IProduct>();
   const { id } = useParams();
@@ -61,6 +62,12 @@ const BookDetails = () => {
               <strong>Reviews: </strong> {product?.reviews?.length}
             </div>
 
+            {product && product.reviews && product._id && (
+              <SingleProductReviews
+                reviews={product?.reviews}
+                id={product?._id}
+              />
+            )}
             {email && (
               <>
                 {" "}

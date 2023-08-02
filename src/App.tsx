@@ -12,6 +12,7 @@ import { getList } from "./redux/readList/listSlice";
 import { useGetfromDbCartQuery } from "./redux/cart/apiCart";
 import { getCart } from "./redux/cart/cartSlice";
 import { ToastContainer } from "react-toastify";
+import Footer from "./components/Footer";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -45,6 +46,7 @@ function App() {
         )}
         <Navbar />
         <Outlet />
+        <Footer />
       </div>
     </>
   );

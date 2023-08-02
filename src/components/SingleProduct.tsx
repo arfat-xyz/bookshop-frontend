@@ -45,7 +45,7 @@ const SingleProduct = ({ product }: { product: IProduct }) => {
               <p>Genre : {product.genre}</p>
             </div>
             <div className="my-2 flex items-center justify-between">
-              <p>Publish : {product.publication_date}</p>
+              <p>Publication Date : {product.publication_date}</p>
             </div>
             {email && (
               <>

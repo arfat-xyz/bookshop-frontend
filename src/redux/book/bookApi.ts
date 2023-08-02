@@ -29,10 +29,21 @@ const bookApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["updatebook"],
     }),
+    postComment: builder.mutation({
+      query: ({ id, ...payload }) => {
+        return {
+          url: `products/comment/${id}`,
+          method: "POST",
+          body: payload,
+        };
+      },
+      invalidatesTags: ["updateSingleBook"],
+    }),
   }),
 });
 export const {
   usePostProductsMutation,
   useDeletePorductsMutation,
   useUpdatePorductsMutation,
+  usePostCommentMutation,
 } = bookApi;

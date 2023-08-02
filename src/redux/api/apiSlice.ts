@@ -1,12 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-// https://bookshop-backend.vercel.app/api/v1/
 // http://localhost:5000/api/v1/
 export const apiSlice = createApi({
   reducerPath: "apidata",
   baseQuery: fetchBaseQuery({
-    baseUrl: `https://bookshop-backend.vercel.app/api/v1/`,
+    baseUrl: `${import.meta.env.VITE_backend}`,
   }),
-  tagTypes: ["readlist", "wishlish", "updatebook"],
+  tagTypes: ["readlist", "wishlish", "updatebook", "updateSingleBook"],
   endpoints: (builder) => ({
     getAllProducts: builder.query({
       query: ({ limit, search }) => {
@@ -16,6 +15,7 @@ export const apiSlice = createApi({
     }),
     getSingleProduct: builder.query({
       query: (id) => `/products/${id}`,
+      providesTags: ["updateSingleBook"],
     }),
   }),
 });

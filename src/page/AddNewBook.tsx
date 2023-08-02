@@ -1,9 +1,9 @@
-"use client";
-
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import logo from "/amazing.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hook";
+// import { ErrorMessage } from "@hookform/error-message";
 import { usePostProductsMutation } from "../redux/book/bookApi";
 type FormData = {
   image: string;
@@ -23,14 +23,12 @@ const AddNewBook = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
-
-  const { image, title, genre, author, publication_date } = watch();
   const onSubmit = (data: FormData) => {
     data = { ...data, addBy: email! };
     postProducts(data);
+    toast.success("New book added");
     navigate("/");
   };
   return (
@@ -61,7 +59,7 @@ const AddNewBook = () => {
                     Image URL
                   </label>
                   <input
-                    {...register("image", { required: true })}
+                    {...register("image", { required: "Image is required" })}
                     type="text"
                     name="image"
                     id="image"
@@ -69,7 +67,7 @@ const AddNewBook = () => {
                     placeholder="Image URL"
                   />
                   {errors.image && (
-                    <span className="bg-red-700">{errors.image.message}</span>
+                    <span className="text-red-700">{errors.image.message}</span>
                   )}
                 </div>
                 <div>
@@ -80,7 +78,9 @@ const AddNewBook = () => {
                     Book name
                   </label>
                   <input
-                    {...register("title", { required: true })}
+                    {...register("title", {
+                      required: "Title is required",
+                    })}
                     type="text"
                     name="title"
                     id="title"
@@ -88,7 +88,7 @@ const AddNewBook = () => {
                     placeholder="Book Name"
                   />
                   {errors.title && (
-                    <span className="bg-red-700">{errors.title.message}</span>
+                    <span className="text-red-700">{errors.title.message}</span>
                   )}
                 </div>
                 <div>
@@ -99,7 +99,7 @@ const AddNewBook = () => {
                     Author
                   </label>
                   <input
-                    {...register("author", { required: true })}
+                    {...register("author", { required: "Author is required" })}
                     type="text"
                     name="author"
                     id="author"
@@ -107,7 +107,9 @@ const AddNewBook = () => {
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
                   {errors.author && (
-                    <span className="bg-red-700">{errors.author.message}</span>
+                    <span className="text-red-700">
+                      {errors.author.message}
+                    </span>
                   )}
                 </div>
                 <div>
@@ -118,7 +120,7 @@ const AddNewBook = () => {
                     Genre
                   </label>
                   <input
-                    {...register("genre", { required: true })}
+                    {...register("genre", { required: "Genre is required" })}
                     type="text"
                     name="genre"
                     id="genre"
@@ -126,7 +128,7 @@ const AddNewBook = () => {
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
                   {errors.genre && (
-                    <span className="bg-red-700">{errors.genre.message}</span>
+                    <span className="text-red-700">{errors.genre.message}</span>
                   )}
                 </div>
                 <div>
@@ -137,7 +139,9 @@ const AddNewBook = () => {
                     Publication Date
                   </label>
                   <input
-                    {...register("publication_date", { required: true })}
+                    {...register("publication_date", {
+                      required: "Publication date is required",
+                    })}
                     type="date"
                     name="publication_date"
                     id="publication_date"
@@ -145,7 +149,7 @@ const AddNewBook = () => {
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
                   {errors.publication_date && (
-                    <span className="bg-red-700">
+                    <span className="text-red-700">
                       {errors.publication_date.message}
                     </span>
                   )}
@@ -154,9 +158,9 @@ const AddNewBook = () => {
                 <button
                   type="submit"
                   className="w-full border-2 hover:border-stone-500 transition-all ease-in-out text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  bg-primary-600  hover:bg-primary-700  focus:ring-primary-800"
-                  disabled={
-                    !image || !title || !genre || !publication_date || !author
-                  }
+                  // disabled={
+                  //   !image || !title || !genre || !publication_date || !author
+                  // }
                 >
                   Submit book
                 </button>

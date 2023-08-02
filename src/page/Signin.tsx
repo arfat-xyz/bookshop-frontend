@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import logo from "/amazing.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../redux/hook";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { loginUser } from "../redux/user/userSlice";
 import { toast } from "react-toastify";
 type FormData = {
@@ -15,10 +15,9 @@ const Signin = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
-  const { email, password } = watch();
+  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const naiv = useNavigate();
   const onSubmit = async (data: FormData) => {
@@ -31,6 +30,9 @@ const Signin = () => {
       toast.error(x.type);
     }
   };
+  if (user.user?.email) {
+    naiv("/");
+  }
   return (
     <>
       <section className="bg-gray-900">
@@ -59,7 +61,7 @@ const Signin = () => {
                     Your email
                   </label>
                   <input
-                    {...register("email", { required: true })}
+                    {...register("email", { required: "Email is required" })}
                     type="email"
                     name="email"
                     id="email"
@@ -67,7 +69,7 @@ const Signin = () => {
                     placeholder="name@company.com"
                   />
                   {errors.email && (
-                    <span className="bg-red-700">{errors.email.message}</span>
+                    <span className="text-red-700">{errors.email.message}</span>
                   )}
                 </div>
                 <div>
@@ -78,7 +80,9 @@ const Signin = () => {
                     Password
                   </label>
                   <input
-                    {...register("password", { required: true })}
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
                     type="password"
                     name="password"
                     id="password"
@@ -86,7 +90,7 @@ const Signin = () => {
                     className=" sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  bg-gray-700  border-gray-600  placeholder-gray-400  text-white  focus:ring-blue-500  focus:border-blue-500"
                   />
                   {errors.password && (
-                    <span className="bg-red-700">
+                    <span className="text-red-700">
                       {errors.password.message}
                     </span>
                   )}
@@ -95,7 +99,6 @@ const Signin = () => {
                 <button
                   type="submit"
                   className="w-full border-2 hover:border-stone-500 transition-all ease-in-out text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  bg-primary-600  hover:bg-primary-700  focus:ring-primary-800"
-                  disabled={!email || !password}
                 >
                   Sign up
                 </button>
